@@ -1,39 +1,51 @@
-class Rps
-	RoPaSc = { 0 => "rock", 1 => "paper", 2 => "scissors" }
+def rps(choice)
+	choices = ['rock', 'paper', 'scissors']
+	
+	wins = [['rock', 'scissors'], 
+			['paper', 'rock'], 
+			['scissors', 'paper']]
 
-	def initialize(level)
-		@level = level
-	end
+	return "Your choice is not valid!" unless choices.include?(choice)
 
-	def move(move)
-		a = RoPaSc[rand(0..2)]
-		puts "Computer picks #{a}"
-		if move == a
-			"Tie"
-		else
-			if move == 'rock'
-				if a == 'paper'
-					"Computer wins"
-				elsif a == 'scissors'
-					"You win"
-				end
-			elsif move == 'scissors'
-				if a == 'paper'
-					"You win"
-				elsif a == 'rock'
-					"Computer wins"
-				end
-			elsif move == 'paper'
-				if a == 'rock'
-					"You win"
-				elsif a == 'scissors'
-					"Computer wins"
-				end
-			end
-		end
+	computer_choice = choices[rand(0..2)]
+	puts "Computer choses #{computer_choice}"
+
+	if choice == computer_choice
+		"There is a tie!"
+	else
+		wins.include?([choice, computer_choice]) ? "You win!" : "You lose!"
 	end
 end
 
+def remix(ingredients)
+	# gather all the alcohol and all the mixers in separate arrays
+	alcohols = ingredients.map { |ingredient_pair| ingredient_pair.first }
+	mixers = ingredients.map { |ingredient_pair| ingredient_pair.last }
 
-game = Rps.new(1)
-puts game.move('rock')
+	# shuffle the mixers array, alcohols does not need to be mixed, you'll get different pairs anyway
+	mixers.shuffle!
+
+	# put them back in pairs and return the pairs
+	new_drinks = []
+	alcohols.each_index { |i| new_drinks << [alcohols[i], mixers[i]] }
+	new_drinks
+end
+
+# Bonus!!!
+def remixer(ingredients)
+	# gather all the alcohol and all the mixers in separate arrays
+	alcohols = ingredients.map { |ingredient_pair| ingredient_pair.first }
+	mixers = ingredients.map { |ingredient_pair| ingredient_pair.last }
+
+	new_drinks = ingredients.dup
+
+	while new_drinks.any? {|new_drink| ingredients.include?(new_drink)}
+		mixers.shuffle!
+		new_drinks = []
+		alcohols.each_index { |i| new_drinks << [alcohols[i], mixers[i]] }
+	end
+	new_drinks
+end
+
+
+p remixer([['wodka', 'orange'], ['rum', 'cola'], ['safari', 'soda'], ['wine', 'water'], ['beer', 'sprite']])
