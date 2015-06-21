@@ -1,6 +1,6 @@
 require 'byebug'
-require './human'
-require './computer'
+require_relative 'human'
+require_relative 'computer'
 
 class Hangman
 	attr_accessor :guess
